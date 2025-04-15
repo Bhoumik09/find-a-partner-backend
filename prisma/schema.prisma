@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+enum Gender{
+  male 
+  female
+}
+model User{
+  id String @default(uuid()) @id
+  name String 
+  email String?
+  gender Gender
+  phoneNumber  String 
+  password String
+  Rides Rides[] @relation("userRides")
+  @@unique([name,phoneNumber])
+}
+model Places{
+  id Int @default(autoincrement()) @id
+  name String
+  Source Rides[] @relation("source")
+  Destination Rides[] @relation("destination")
+}
+enum genderPreference{
+  male
+  female
+  both
+}
+model Rides{
+  id String @default(uuid()) @id
+  source Places @relation("source",fields: [sourceId], references: [id])
+  sourceId Int
+  destination Places @relation("destination",fields: [destinationId], references: [id])
+  destinationId Int
+  date DateTime
+  time DateTime
+  vehicle String
+  numberOfSeats Int
+  price Float
+  phoneNumber String
+  genderPreference genderPreference
+  additionalInfo String?
+  meetingPoints String[]
+  allowInAppChat Boolean @default(false)
+  user User @relation("userRides",fields: [userId], references: [id], onDelete: Cascade)  
+  userId String
+}
