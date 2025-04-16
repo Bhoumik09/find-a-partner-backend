@@ -5,6 +5,8 @@ import { prisma } from "../config/prisma";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import { loginInData, signUpData } from "../interfaces/auth";
+const key:string|undefined=process.env.SECRET_KEY;
+
 export const fetchUser = async (req: Request, res: Response) => {
   try {
     const userInfo: {
@@ -157,19 +159,16 @@ export const login = async (req: Request, res: Response) => {
           password: true,
         },
       });
-    console.log(findUser);
     if (!findUser) {
       res.status(404).json({
         msg: "Either the username or phoneNumber provided is incorrect ",
       });
       return;
     }
-    console.log("reached here");
     const passwordMatches: boolean = bcryptjs.compareSync(
       password,
       findUser.password
     );
-    console.log(passwordMatches);
     if (!passwordMatches) {
       res.status(404).json({ msg: "The password provided is Incorrect" });
       return;
@@ -177,9 +176,8 @@ export const login = async (req: Request, res: Response) => {
     const payload: { id: string } = {
       id: findUser.id,
     };
-    console.log(payload);
-    const token: string = jwt.sign(payload, "This is the pvt key", {
-      expiresIn: "1h",
+    const token: string = jwt.sign(payload,key!, {
+      expiresIn: "7h",
     });
     console.log(token);
     res.status(200).json({ msg: "User Logged In Successfully", token });
