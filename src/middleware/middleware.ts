@@ -9,15 +9,14 @@ export const authenticateUser = (req: Request, res: Response, next: NextFunction
   const token = req.headers.authorization?.split(" ")[1]; // Assuming Bearer token
  
   if (!token) {
-     res.status(403).json({ msg: "No token provided" });
-
+     res.status(403).json({ error: "No token provided" });
      return;
   }
 
   // Verify token
   jwt.verify(token, key!, (err, decoded) => {
     if (err) {
-       res.status(401).json({ msg: "Invalid token" });
+       res.status(401).json({ error: "Invalid token" });
        return;
     }
     // Attach the user info to req

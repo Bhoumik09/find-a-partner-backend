@@ -27,7 +27,7 @@ export const fetchUser = async (req: Request, res: Response) => {
     });
     if (!userInfo) {
       res.status(404).json({
-        msg: "User not found ",
+        error: "User not found ",
       });
       return;
     }
@@ -42,7 +42,7 @@ export const fetchUser = async (req: Request, res: Response) => {
         error: error.message,
       });
       res.status(500).json({
-        message: "Server error Occured",
+        error: "Server error Occured",
       });
       return;
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -74,7 +74,7 @@ export const fetchUser = async (req: Request, res: Response) => {
       email: req.body?.email,
       error: error,
     });
-    res.status(500).json({ message: "An error occurred during login." });
+    res.status(500).json({ error: "An error occurred during login." });
   }
 };
 export const fetchUserName = async (req: Request, res: Response) => {
@@ -91,7 +91,7 @@ export const fetchUserName = async (req: Request, res: Response) => {
     console.log(userInfo);
     if (!userInfo) {
       res.status(404).json({
-        msg: "User not found ",
+        error: "User not found ",
       });
       return;
     }
@@ -106,7 +106,7 @@ export const fetchUserName = async (req: Request, res: Response) => {
         error: error.message,
       });
       res.status(500).json({
-        message: "Server error Occured",
+        error: "Server error Occured",
       });
       return;
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -138,12 +138,11 @@ export const fetchUserName = async (req: Request, res: Response) => {
       email: req.body?.email,
       error: error,
     });
-    res.status(500).json({ message: "An error occurred during login." });
+    res.status(500).json({ error: "An error occurred during login." });
   }
 };
 export const login = async (req: Request, res: Response) => {
   const { username, phoneNumber, password }: loginInData = req.body;
-  console.log();
   console.log(req.body);
   try {
     const findUser: { id: string; password: string } | null =
@@ -161,7 +160,7 @@ export const login = async (req: Request, res: Response) => {
       });
     if (!findUser) {
       res.status(404).json({
-        msg: "Either the username or phoneNumber provided is incorrect ",
+        error: "Either the username or phoneNumber provided is incorrect ",
       });
       return;
     }
@@ -170,7 +169,7 @@ export const login = async (req: Request, res: Response) => {
       findUser.password
     );
     if (!passwordMatches) {
-      res.status(404).json({ msg: "The password provided is Incorrect" });
+      res.status(404).json({ error: "The password provided is Incorrect" });
       return;
     }
     const payload: { id: string } = {
@@ -189,7 +188,7 @@ export const login = async (req: Request, res: Response) => {
         error: error.message,
       });
       res.status(500).json({
-        message: "Server error Occured",
+        error: "Server error Occured",
       });
       return;
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -223,7 +222,7 @@ export const login = async (req: Request, res: Response) => {
       email: req.body?.email,
       error: error,
     });
-    res.status(500).json({ message: "An error occurred during login." });
+    res.status(500).json({ error: "An error occurred during login." });
   }
 };
 export const signUp = async (req: Request, res: Response) => {
@@ -247,7 +246,7 @@ export const signUp = async (req: Request, res: Response) => {
     console.log(checkDuplicateNumber);
     if (checkDuplicateNumber) {
       res.status(404).json({
-        msg: "Either the phone number or username provided is already registered",
+        error: "Either the phone number or username provided is already registered",
       });
       logger.warn("Both username and phone number are alreaddy registered", {
         email,
@@ -275,7 +274,7 @@ export const signUp = async (req: Request, res: Response) => {
         error: error.message,
       });
       res.status(500).json({
-        message: "Server error Occured",
+        error: "Server error Occured",
       });
       return;
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -310,6 +309,6 @@ export const signUp = async (req: Request, res: Response) => {
       phoneNumber: req.body?.phoneNumber,
       error: error,
     });
-    res.status(500).json({ message: "An error occurred during signup." });
+    res.status(500).json({ error: "An error occurred during signup." });
   }
 };
