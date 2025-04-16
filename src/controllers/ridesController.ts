@@ -29,8 +29,7 @@ export const createRide = async (req: Request, res: Response) => {
         where: { id: userId },
         select: { phoneNumber: true },
       });
-    console.log(typeof date);
-    console.log(typeof time);
+   
     const ride = await prisma.rides.create({
       data: {
         sourceId: source,
@@ -48,9 +47,7 @@ export const createRide = async (req: Request, res: Response) => {
         userId: userId,
       },
     });
-    console.log(ride);
     res.status(200).json({ msg: "Ride is created successfully" });
-    console.log("Ride is created successfully");
   } catch (error: unknown) {
     if (error instanceof Error) {
       logger.error("Error occurred in fetching  User Info", {
@@ -116,7 +113,6 @@ export const updateRide = async (req: Request, res: Response) => {
         where: { id: userId },
         select: { phoneNumber: true },
       });
-    console.log(req.body);
     const updatedRide: { id: string } | null = await prisma.rides.update({
       where: {
         id: rideId,
@@ -146,7 +142,6 @@ export const updateRide = async (req: Request, res: Response) => {
       return;
     }
     res.status(200).json({ msg: "Ride is created successfully" });
-    console.log("Ride is updated successfully");
   } catch (error: unknown) {
     if (error instanceof Error) {
       logger.error("Error occurred in fetching  User Info", {
@@ -250,9 +245,7 @@ export const fetchRidesData = async (req: Request, res: Response) => {
       
       return ride.user?.id!==req.user?.id
     })
-    console.log(ridesData);
     res.status(200).json({ msg: "Ride is fecthed successfully", ridesData :filteredRidedata});
-    console.log("Ride is updated fetched successfully", ridesData);
   } catch (error: unknown) {
     if (error instanceof Error) {
       logger.error("Error occurred in fetching  User Info", {
@@ -362,7 +355,6 @@ export const getUserRide = async (req: Request, res: Response) => {
       return;
     }
     res.status(200).json({ msg: "Ride is fecthed successfully", ridesData });
-    console.log("Ride is updated fetched successfully", ridesData);
   } catch (error: unknown) {
     if (error instanceof Error) {
       logger.error("Error occurred in fetching  User Info", {
@@ -494,7 +486,6 @@ export const getAllRideOfUser = async (req: Request, res: Response) => {
   }
 };
 export const deleteRide = async (req: Request, res: Response) => {
-  console.log("smd.masn,an");
   try {
     const { rideId } = req.params as { rideId: string };
 
@@ -509,7 +500,6 @@ export const deleteRide = async (req: Request, res: Response) => {
       return;
     }
     res.status(200).json({ msg: "Ride is created successfully" });
-    console.log("Ride is updated successfully");
   } catch (error: unknown) {
     if (error instanceof Error) {
       logger.error("Error occurred in fetching  User Info", {

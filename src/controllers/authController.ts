@@ -88,7 +88,6 @@ export const fetchUserName = async (req: Request, res: Response) => {
         id: true,
       },
     });
-    console.log(userInfo);
     if (!userInfo) {
       res.status(404).json({
         error: "User not found ",
@@ -143,7 +142,6 @@ export const fetchUserName = async (req: Request, res: Response) => {
 };
 export const login = async (req: Request, res: Response) => {
   const { username, phoneNumber, password }: loginInData = req.body;
-  console.log(req.body);
   try {
     const findUser: { id: string; password: string } | null =
       await prisma.user.findUnique({
@@ -178,7 +176,6 @@ export const login = async (req: Request, res: Response) => {
     const token: string = jwt.sign(payload,key!, {
       expiresIn: "7h",
     });
-    console.log(token);
     res.status(200).json({ msg: "User Logged In Successfully", token });
   } catch (error) {
     if (error instanceof Error) {
@@ -226,11 +223,9 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 export const signUp = async (req: Request, res: Response) => {
-  console.log(signUp)
   const { username, email, gender, phoneNumber, password }: signUpData =
     req.body;
   try {
-    console.log(req.body);
     const checkDuplicateNumber: { id: string } | null =
       await prisma.user.findUnique({
         where: {
@@ -243,7 +238,6 @@ export const signUp = async (req: Request, res: Response) => {
           id: true,
         },
       });
-    console.log(checkDuplicateNumber);
     if (checkDuplicateNumber) {
       res.status(404).json({
         error: "Either the phone number or username provided is already registered",
@@ -266,6 +260,91 @@ export const signUp = async (req: Request, res: Response) => {
       },
     });
     res.status(200).json({ msg: "User is successfully registered" });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      logger.error("Error occurred in creating User", {
+        username: req.body?.username,
+        phoneNumber: req.body?.phoneNumber,
+        error: error.message,
+      });
+      res.status(500).json({
+        error: "Server error Occured",
+      });
+      return;
+    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code == "P2028") {
+        console.error("⚠️ Transaction Timeout: The query took too long.");
+        logger.error("Transaction Timeout", {
+          username: req.body?.username,
+          phoneNumber: req.body?.phoneNumber,
+          error: error.message,
+        });
+        res.status(408).json({
+          error: "Transaction took too long and was aborted. Please try again.",
+        });
+        return;
+      } else {
+        console.error(`🔴 Prisma Error (${error.code}):`, error.message);
+        logger.error("Prisma error", {
+          username: req.body?.username,
+          phoneNumber: req.body?.phoneNumber,
+          error: error.message,
+        });
+        res.status(408).json({
+          error: "Something went wrong. Try again ",
+        });
+        return;
+      }
+      // Prisma's timeout error code
+    }
+
+    logger.error("Error occurred in creating User", {
+      username: req.body?.username,
+      phoneNumber: req.body?.phoneNumber,
+      error: error,
+    });
+    res.status(500).json({ error: "An error occurred during signup." });
+  }
+};
+export const forgotPass = async (req: Request, res: Response) => {
+  const { username, phoneNumber, password:currentPassword }:loginInData =
+    req.body;
+  try {
+    const checkId: { id: string } | null =
+      await prisma.user.findUnique({
+        where: {
+          name_phoneNumber: {
+            name: username,
+            phoneNumber: phoneNumber,
+          },
+        },
+        select: {
+          id: true,
+        },
+      });
+    if (!checkId) {
+      res.status(404).json({
+        error: "The phone number and username provided is not registered",
+      });
+      logger.warn("Both username and phone number are not registered", {
+        phoneNumber,
+      });
+      return;
+    }
+    const hashedPassword: string = await bcryptjs.hash(currentPassword, 10);
+
+    await prisma.user.update({
+      where:{
+        name_phoneNumber:{
+          name:username,
+          phoneNumber
+        }
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+    res.status(200).json({ msg: "Password is successfully Updated" });
   } catch (error: unknown) {
     if (error instanceof Error) {
       logger.error("Error occurred in creating User", {

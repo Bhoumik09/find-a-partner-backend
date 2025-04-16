@@ -12,3 +12,4 @@ export const loginInSchema = z.object({
     phoneNumber:z.string({required_error:"Phone Number cannot be left empty"}).min(9),
     password:z.string({required_error:"Password cannot be left empty"}).min(6),
 })
+
