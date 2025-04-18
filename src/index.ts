@@ -7,7 +7,7 @@ import cors from 'cors'
 import ridesRouter from './routes/rides';
 import placesRouter from './routes/places';
 app.use(cors({
-  origin:'https://find-ride-partner-igqy.vercel.app'
+  origin:['https://find-ride-partner-igqy.vercel.app', 'http://localhost:3000']
 }
 ))
 dotenv.config()
