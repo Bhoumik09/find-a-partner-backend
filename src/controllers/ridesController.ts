@@ -3,7 +3,6 @@ import logger from "../../logger";
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
 import { createRideType, rideType, updateRideType } from "../interfaces/rides";
-import { enumUtil } from "zod/lib/helpers/enumUtil";
 
 export const createRide = async (req: Request, res: Response) => {
  
