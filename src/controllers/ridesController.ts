@@ -92,8 +92,8 @@ export const createRide = async (req: Request, res: Response) => {
 };
 export const updateRide = async (req: Request, res: Response) => {
   const {
-    sourceID,
-    destinationID,
+    source,
+    destination,
     date,
     time,
     seats,
@@ -102,8 +102,8 @@ export const updateRide = async (req: Request, res: Response) => {
     number,
     genderPreference,
     additionalInfo,
-    meetingPoint,
-    allowInAppChat,
+    meetingPointArr,
+    allowChat,
   }: updateRideType = req.body;
   try {
     const { rideId } = req.params as { rideId: string };
@@ -119,24 +119,24 @@ export const updateRide = async (req: Request, res: Response) => {
         userId: req.user?.id,
       },
       data: {
-        sourceId: sourceID,
-        destinationId: destinationID,
-        date,
-        time,
+        sourceId:source,
+        destinationId:  destination,
+        date: date,
+        time: time,
         numberOfSeats: Number(seats),
         vehicle: vehicleName,
-        price,
+        price: price,
         phoneNumber: number || userPhoneNumber!.phoneNumber,
-        genderPreference,
-        additionalInfo,
-        meetingPoints: meetingPoint,
-        allowInAppChat,
+        genderPreference: genderPreference,
+        additionalInfo: additionalInfo,
+        meetingPoints:  meetingPointArr,
+        allowInAppChat:allowChat,
         userId: userId,
       },
-      select: {
-        id: true,
-      },
+      
     });
+    console.log('updated rile');
+    console.log(updatedRide);
     if (!updatedRide) {
       res.status(404).json({ msg: "Ride not found" });
       return;
