@@ -6,7 +6,10 @@ const app:Application=express();
 import cors from 'cors'
 import ridesRouter from './routes/rides';
 import placesRouter from './routes/places';
-
+app.use(cors({
+  origin:'https://find-ride-partner-igqy.vercel.app'
+}
+))
 dotenv.config()
 app.use((req:Request, _, next:NextFunction) => {
     console.log("➡️ Request:", req.method, req.url);
