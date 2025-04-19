@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import logger from "../../logger";
+import logger from "../config/logger";
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
 export const getAllPlaces = async (_:Request, res: Response) => {

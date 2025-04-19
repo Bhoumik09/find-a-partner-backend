@@ -1,5 +1,5 @@
 import { Gender, genderPreference, Prisma } from "@prisma/client";
-import logger from "../../logger";
+import logger from "../config/logger";
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
 import { createRideType, rideType, updateRideType } from "../interfaces/rides";

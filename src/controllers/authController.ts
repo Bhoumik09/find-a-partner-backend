@@ -1,5 +1,5 @@
 import { Gender, Prisma } from "@prisma/client";
-import logger from "../../logger";
+import logger from "../config/logger";
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
 import jwt from "jsonwebtoken";

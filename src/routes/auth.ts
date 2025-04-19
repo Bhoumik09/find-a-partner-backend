@@ -3,7 +3,7 @@ const authRouter = express.Router();
 import { validateRequest } from "../middleware/zodMiddleware";
 import { loginInSchema, signUpSchema } from "../models/auth";
 import { authenticateUser } from "../middleware/middleware";
-import logger from "../../logger";
+import logger from "../config/logger";
 import { fetchUser, fetchUserName, forgotPass, login, signUp } from "../controllers/authController";
 authRouter.post("/signup", validateRequest(signUpSchema), signUp);
 authRouter.post("/login", validateRequest(loginInSchema), login);
