@@ -23,4 +23,4 @@ app.use("/places",placesRouter)
 app.get('/',(_,res)=>{
   res.send("Welcome to find my partner backend")
 })
-export default app;
+export default (req:Request, res:Response) => app(req, res);
