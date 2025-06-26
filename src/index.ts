@@ -23,4 +23,6 @@ app.use("/places",placesRouter)
 app.get('/',(_,res)=>{
   res.send("Welcome to find my partner backend")
 })
-export default (req:Request, res:Response) => app(req, res);
+app.listen(5000,()=>{
+  console.log("Tinnung at port 5000")
+})
