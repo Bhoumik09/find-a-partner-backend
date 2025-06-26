@@ -20,6 +20,7 @@ app.use(express.json())
 app.use("/auth",authRouter)
 app.use("/rides",ridesRouter)
 app.use("/places",placesRouter)
-app.listen(5000, ()=>{
-    console.log('server running on 5000')
+app.get('/',(_,res)=>{
+  res.send("Welcome to find my partner backend")
 })
+export default app;
